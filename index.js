@@ -19,7 +19,15 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    console.log("connected");
+    const database = client.db("doctors_portal");
+    const appointmentCollection = database.collection("appointments");
+
+    // post a appointment
+    app.post("/appointments", async (req, res) => {
+      const appointment = req.body;
+      const result = await appointmentCollection.insertOne(appointment);
+      res.json(result);
+    });
   } finally {
     // await client.close()
   }
@@ -27,7 +35,7 @@ async function run() {
 
 run().catch(console.error);
 app.get("/", (req, res) => {
-  res.send("Doctors portal server running");
+  res.send("Doctors portals server is running");
 });
 
 app.listen(port, () => {
