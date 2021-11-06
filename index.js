@@ -21,6 +21,7 @@ async function run() {
     await client.connect();
     const database = client.db("doctors_portal");
     const appointmentCollection = database.collection("appointments");
+    const userCollection = database.collection("users");
 
     // GET appointments
     app.get("/appointments", async (req, res) => {
@@ -36,6 +37,12 @@ async function run() {
     app.post("/appointments", async (req, res) => {
       const appointment = req.body;
       const result = await appointmentCollection.insertOne(appointment);
+      res.json(result);
+    });
+    // save user
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
       res.json(result);
     });
   } finally {
