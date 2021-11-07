@@ -1,3 +1,5 @@
 /node_modules
 
 .env
+
+/simple-firebase-authenti-firebase-adminsdk.json
