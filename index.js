@@ -7,19 +7,7 @@ require("dotenv").config();
 
 const port = process.env.PORT || 5000;
 
-// const serviceAccount = require("./simple-firebase-authenti-firebase-adminsdk.json");
-const serviceAccount = {
-  type: `${process.env.DB_USER_TYPE}`,
-  project_id: `${process.env.DB_USER_PROJECT_ID}`,
-  private_key_id: `${process.env.DB_USER_PRIVATE_KEY_ID}`,
-  private_key: `${process.env.DB_USER_PRIVATE_KEY}`,
-  client_email: `${process.env.DB_USER_CLIENT_EMAIL}`,
-  client_id: `${process.env.DB_USER_CLIENT_ID}`,
-  auth_uri: `${process.env.DB_USER_AUTH_URI}`,
-  token_uri: `${process.env.DB_USER_TOKEN_URI}`,
-  auth_provider_x509_cert_url: `${process.env.DB_USER_AUTH_PROVIDER_X509_CERT_URL}`,
-  client_x509_cert_url: `${process.env.DB_USER_CLIENT_X509_CERT_URL}`,
-};
+const serviceAccount = require("./simple-firebase-authenti-firebase-adminsdk.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -98,7 +86,6 @@ async function run() {
     app.put("/users/admin", verifyToken, async (req, res) => {
       const user = req.body;
       const requester = req.decodedEmail;
-      console.log(requester);
       if (requester) {
         const requesterAccount = await userCollection.findOne({
           email: requester,
