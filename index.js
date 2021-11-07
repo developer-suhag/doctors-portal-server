@@ -39,15 +39,15 @@ async function run() {
       const result = await appointmentCollection.insertOne(appointment);
       res.json(result);
     });
-    app.get("/users/:admin", async (req, res) => {
-      const email = req.params.admin;
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
       let isAdmin = false;
       if (user?.role === "admin") {
         isAdmin = true;
       }
-      res.send({ admin: isAdmin });
+      res.json({ admin: isAdmin });
     });
     // save user
     app.post("/users", async (req, res) => {
