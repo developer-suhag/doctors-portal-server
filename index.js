@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const port = process.env.PORT || 5000;
 
-const serviceAccount = require("./simple-firebase-authenti-firebase-adminsdk.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -44,7 +44,8 @@ async function run() {
     const userCollection = database.collection("users");
 
     // GET appointments
-    app.get("/appointments", async (req, res) => {
+    app.get("/appointments", verifyToken, async (req, res) => {
+      console.log("hitting");
       const email = req.query.email;
       const date = new Date(req.query.date).toLocaleDateString();
       const query = { email: email, date: date };
@@ -55,6 +56,7 @@ async function run() {
 
     // post a appointment
     app.post("/appointments", async (req, res) => {
+      console.log("hit it");
       const appointment = req.body;
       const result = await appointmentCollection.insertOne(appointment);
       res.json(result);
