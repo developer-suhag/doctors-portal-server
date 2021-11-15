@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 const admin = require("firebase-admin");
 require("dotenv").config();
+const ObjectId = require("mongodb").ObjectId;
 
 const port = process.env.PORT || 5000;
 
@@ -52,6 +53,14 @@ async function run() {
       const cursor = appointmentCollection.find(query);
       const appointments = await cursor.toArray();
       res.json(appointments);
+    });
+
+    // get a single appointment
+    app.get("/appointments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await appointmentCollection.findOne(query);
+      res.json(result);
     });
 
     // post a appointment
